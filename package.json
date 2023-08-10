@@ -1,15 +1,29 @@
 {
-	"name": "webworkerize",
+	"name": "simple-worker-vite",
 	"version": "0.0.0",
-	"description": "use web workers with ease",
+	"description": "easy way to use web workers with vite",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
-		"format": "prettier --ignore-path .gitignore --write ."
+		"build": "vite build && npm run build-plugin",
+		"build-plugin": "tsc src/vite-plugin.ts --outDir dist",
+		"format": "prettier --ignore-path .gitignore --write \"src/**/*.{js,ts}\""
+	},
+	"exports": {
+		"./plugin": {
+			"import": "./dist/vite-plugin.js",
+			"types": "./dist/vite-plugin.d.ts"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"plugin": [
+				"dist/vite-plugin.d.ts"
+			]
+		}
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/jason-rietzke/webworkerize.git"
+		"url": "git+https://github.com/jason-rietzke/simple-worker-vite.git"
 	},
 	"author": "Jason Rietzke <jason.rietzke@livereader.de> (https://github.com/jason-rietzke)",
 	"contributors": [
@@ -17,15 +31,26 @@
 	],
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/jason-rietzke/webworkerize/issues"
+		"url": "https://github.com/jason-rietzke/simple-worker-vite/issues"
 	},
-	"homepage": "https://github.com/jason-rietzke/webworkerize#readme",
+	"homepage": "https://github.com/jason-rietzke/simple-worker-vite#readme",
 	"devDependencies": {
 		"@types/node": "^20.4.9",
+		"esbuild": "^0.19.0",
 		"prettier": "^3.0.1",
-		"tsc": "^2.0.4",
-		"typescript": "^5.0.2",
+		"typescript": "^5.1.6",
 		"vite": "^4.4.5",
 		"vite-plugin-dts": "^3.5.1"
-	}
+	},
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"plugin",
+		"utility",
+		"worker",
+		"webworker",
+		"vite",
+		"vite-plugin"
+	]
 }

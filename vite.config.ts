@@ -14,7 +14,7 @@ export default defineConfig({
 			entry: {
 				main: resolve(__dirname, "src/main.ts"),
 			},
-			name: "webworkerize",
+			name: "simple-worker-vite",
 		},
 		minify: false,
 		rollupOptions: {

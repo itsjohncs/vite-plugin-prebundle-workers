@@ -7,7 +7,7 @@ export interface WorkerOptions {
 	name: string;
 	srcPath: string;
 }
-export interface WebWorkerizeOptions {
+export interface SimpleWorkerOptions {
 	publicPath?: string;
 	workers: WorkerOptions[];
 	minify?: boolean;
@@ -24,7 +24,7 @@ let config: {
 };
 export { config };
 
-export function plugin(options: WebWorkerizeOptions): Plugin {
+export function plugin(options: SimpleWorkerOptions): Plugin {
 	config = {
 		publicPath: options.publicPath || "workers/",
 		workers: options.workers || [],
@@ -34,7 +34,7 @@ export function plugin(options: WebWorkerizeOptions): Plugin {
 	let resolvedConfig: ResolvedConfig;
 
 	return {
-		name: "webworkerize",
+		name: "simple-worker-vite",
 		configResolved(getResolvedConfig) {
 			resolvedConfig = getResolvedConfig;
 		},
