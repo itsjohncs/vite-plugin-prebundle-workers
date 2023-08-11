@@ -9,6 +9,11 @@
 		"format": "prettier --ignore-path .gitignore --write \"src/**/*.{js,ts}\""
 	},
 	"exports": {
+		".": {
+			"import": "./dist/main.mjs",
+			"require": "./dist/main.umd.js",
+			"types": "./dist/main.d.ts"
+		},
 		"./plugin": {
 			"import": "./dist/vite-plugin.js",
 			"types": "./dist/vite-plugin.d.ts"
@@ -16,6 +21,9 @@
 	},
 	"typesVersions": {
 		"*": {
+			".": [
+				"dist/main.d.ts"
+			],
 			"plugin": [
 				"dist/vite-plugin.d.ts"
 			]
