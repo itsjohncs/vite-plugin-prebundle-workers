@@ -1,6 +1,6 @@
 {
 	"name": "simple-worker-vite",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "easy way to use web workers with vite",
 	"scripts": {
 		"dev": "vite",
