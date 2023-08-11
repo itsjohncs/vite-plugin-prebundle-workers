@@ -24,7 +24,7 @@ let config: {
 };
 export { config };
 
-export function plugin(options: SimpleWorkerOptions): Plugin {
+export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
 	config = {
 		publicPath: options.publicPath || "workers/",
 		workers: options.workers || [],

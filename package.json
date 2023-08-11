@@ -41,7 +41,7 @@
 	"bugs": {
 		"url": "https://github.com/jason-rietzke/simple-worker-vite/issues"
 	},
-	"homepage": "https://github.com/jason-rietzke/simple-worker-vite#readme",
+	"homepage": "https://jason-rietzke.github.io/simple-worker-vite/",
 	"devDependencies": {
 		"@types/node": "^20.4.9",
 		"esbuild": "^0.19.0",
