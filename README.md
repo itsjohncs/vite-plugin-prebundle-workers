@@ -35,7 +35,7 @@ It allows you to specify the worker files in your vite config and then compile t
 ### Install
 
 ```bash
-npm install simple-worker-vite --save-dev
+npm install simple-worker-vite
 ```
 
 ### Add to vite config
@@ -75,7 +75,7 @@ workerStore
 	.catch(console.error);
 ```
 
-The `WorkerStore` will automatically load the worker from the `dist/workers/` directory (by default) and spawn it as a new worker.  
+The `WorkerStore` will automatically load the worker from the `/workers/` path (by default) and spawn it as a new worker.  
 Form there on you can use the worker as you normally would.
 
 For more information on how to use the library, see the [documentation](https://jason-rietzke.github.io/simple-worker-vite/).

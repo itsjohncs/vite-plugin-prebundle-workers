@@ -1,25 +1,23 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
-  name: "Simple Worker Vite"
-  text: "easy way to use web workers with vite"
-  tagline: My great project tagline
-  actions:
-    - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+    name: "Simple Worker Vite"
+    tagline: "easy way to use web workers with vite"
+    actions:
+        - theme: alt
+          text: Plugin
+          link: /plugin
+        - theme: alt
+          text: WorkerStore
+          link: /worker-store
+        - theme: brand
+          text: ⭐ on GitHub
+          link: https://github.com/jason-rietzke/simple-worker-vite
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+    - title: Vite Plugin
+      details: Comes with a vite plugin to make it easy to use web workers in your vite project.
+    - title: WorkerStore
+      details: Contains a WorkerStore class that makes it convenient to use the workers in your project.
 ---
-
