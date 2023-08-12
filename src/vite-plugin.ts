@@ -32,41 +32,64 @@ export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
 	};
 
 	let resolvedConfig: ResolvedConfig;
+	let distPath: string;
 
 	return {
 		name: "simple-worker-vite",
 		configResolved(getResolvedConfig) {
 			resolvedConfig = getResolvedConfig;
-		},
-		writeBundle() {
-			const distPath = path.join(
+			distPath = path.join(
 				resolvedConfig.root,
 				resolvedConfig.build.outDir,
 				resolvedConfig.base,
 				config.publicPath,
 			);
-			if (!fs.existsSync(distPath)) {
-				fs.mkdirSync(distPath, {
-					recursive: true,
+		},
+		configureServer(server) {
+			buildWorkers(
+				{
+					...config,
+					minify: false,
+				},
+				distPath,
+			);
+			return () => {
+				server.middlewares.use((req, res, next) => {
+					if (!req.url?.includes(config.publicPath)) return next();
+					const workerPath = path.join(
+						resolvedConfig.root,
+						resolvedConfig.build.outDir,
+						resolvedConfig.base,
+						req.url,
+					);
+					if (!fs.existsSync(workerPath)) return next();
+					res.setHeader("Content-Type", "application/javascript");
+					res.end(fs.readFileSync(workerPath));
 				});
-			}
-
-			config.workers.forEach((worker) => {
-				if (!fs.existsSync(worker.srcPath)) {
-					throw new Error(`Worker file ${worker.srcPath} does not exist`);
-				}
-				esbuild.buildSync({
-					entryPoints: [worker.srcPath],
-					bundle: true,
-					minify: config.minify,
-					legalComments: "none",
-					format: "esm",
-					outfile: path.join(distPath, `${worker.name}.worker.js`),
-					platform: "browser",
-				});
-			});
+			};
+		},
+		writeBundle() {
+			if (!fs.existsSync(distPath)) fs.mkdirSync(distPath, { recursive: true });
+			buildWorkers(config, distPath);
 		},
 	};
+}
+
+function buildWorkers(config: SimpleWorkerOptions, distPath: string) {
+	config.workers.forEach((worker) => {
+		if (!fs.existsSync(worker.srcPath)) {
+			throw new Error(`Worker file ${worker.srcPath} does not exist`);
+		}
+		esbuild.buildSync({
+			entryPoints: [worker.srcPath],
+			bundle: true,
+			minify: config.minify,
+			legalComments: "none",
+			format: "esm",
+			outfile: path.join(distPath, `${worker.name}.worker.js`),
+			platform: "browser",
+		});
+	});
 }
 
 export function workerFromFile(path: string): WorkerOptions {
