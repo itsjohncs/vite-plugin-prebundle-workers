@@ -46,13 +46,7 @@ export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
 			);
 		},
 		configureServer(server) {
-			buildWorkers(
-				{
-					...config,
-					minify: false,
-				},
-				distPath,
-			);
+			buildWorkers(distPath, false, config.workers);
 			return () => {
 				server.middlewares.use((req, res, next) => {
 					if (!req.url?.includes(config.publicPath)) return next();
@@ -68,27 +62,42 @@ export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
 				});
 			};
 		},
+		handleHotUpdate(ctx) {
+			const workerSrcPaths = config.workers.map((worker) => worker.srcPath);
+			const workerSrcPath = workerSrcPaths.find((path) => ctx.file.includes(path));
+			if (!workerSrcPath) return;
+			const worker = config.workers.find((worker) => worker.srcPath === workerSrcPath);
+			if (!worker) return;
+			console.log(`[simple-worker-vite] Rebuilding worker "${worker.name}" (${worker.srcPath})`);
+			buildWorker(distPath, false, worker);
+			ctx.server.ws.send({
+				type: "full-reload",
+				path: "*",
+			});
+		},
 		writeBundle() {
 			if (!fs.existsSync(distPath)) fs.mkdirSync(distPath, { recursive: true });
-			buildWorkers(config, distPath);
+			buildWorkers(distPath, config.minify, config.workers);
 		},
 	};
 }
 
-function buildWorkers(config: SimpleWorkerOptions, distPath: string) {
-	config.workers.forEach((worker) => {
-		if (!fs.existsSync(worker.srcPath)) {
-			throw new Error(`Worker file ${worker.srcPath} does not exist`);
-		}
-		esbuild.buildSync({
-			entryPoints: [worker.srcPath],
-			bundle: true,
-			minify: config.minify,
-			legalComments: "none",
-			format: "esm",
-			outfile: path.join(distPath, `${worker.name}.worker.js`),
-			platform: "browser",
-		});
+function buildWorkers(distPath: string, minify: boolean, workers: WorkerOptions[]) {
+	workers.forEach((worker) => {
+		buildWorker(distPath, minify, worker);
+	});
+}
+
+function buildWorker(distPath: string, minimize: boolean, worker: WorkerOptions) {
+	if (!fs.existsSync(worker.srcPath)) throw new Error(`Worker file ${worker.srcPath} does not exist`);
+	esbuild.buildSync({
+		entryPoints: [worker.srcPath],
+		bundle: true,
+		minify: minimize,
+		legalComments: minimize ? "none" : undefined,
+		format: "esm",
+		outfile: path.join(distPath, `${worker.name}.worker.js`),
+		platform: "browser",
 	});
 }
 
