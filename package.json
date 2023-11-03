@@ -4,19 +4,30 @@
 	"description": "easy way to use web workers with vite",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build && npm run build-plugin",
-		"build-plugin": "tsc src/vite-plugin.ts --outDir dist",
+		"build": "vite build && npm run publint",
+		"publint": "npx publint --strict",
 		"format": "prettier --ignore-path .gitignore --write \"src/**/*.{js,ts}\""
 	},
 	"exports": {
 		".": {
-			"import": "./dist/main.mjs",
-			"require": "./dist/main.umd.js",
-			"types": "./dist/main.d.ts"
+			"import": {
+				"types": "./dist/main.d.mts",
+				"default": "./dist/main.mjs"
+			},
+			"require": {
+				"types": "./dist/main.d.ts",
+				"default": "./dist/main.js"
+			}
 		},
 		"./plugin": {
-			"import": "./dist/vite-plugin.js",
-			"types": "./dist/vite-plugin.d.ts"
+			"import": {
+				"types": "./dist/vite-plugin.d.mts",
+				"default": "./dist/vite-plugin.mjs"
+			},
+			"require": {
+				"types": "./dist/vite-plugin.d.ts",
+				"default": "./dist/vite-plugin.js"
+			}
 		}
 	},
 	"typesVersions": {
