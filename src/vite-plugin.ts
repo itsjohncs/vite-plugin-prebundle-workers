@@ -1,4 +1,4 @@
-import { Plugin, ResolvedConfig } from "vite";
+import type { Plugin, ResolvedConfig } from "vite";
 import * as esbuild from "esbuild";
 import * as path from "path";
 import * as fs from "fs";
@@ -28,7 +28,7 @@ export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
 	config = {
 		publicPath: options.publicPath || "workers/",
 		workers: options.workers || [],
-		minify: options.minify || true,
+		minify: options.minify ?? true,
 	};
 
 	let resolvedConfig: ResolvedConfig;
@@ -88,13 +88,13 @@ function buildWorkers(distPath: string, minify: boolean, workers: WorkerOptions[
 	});
 }
 
-function buildWorker(distPath: string, minimize: boolean, worker: WorkerOptions) {
+function buildWorker(distPath: string, minify: boolean, worker: WorkerOptions) {
 	if (!fs.existsSync(worker.srcPath)) throw new Error(`Worker file ${worker.srcPath} does not exist`);
 	esbuild.buildSync({
 		entryPoints: [worker.srcPath],
 		bundle: true,
-		minify: minimize,
-		legalComments: minimize ? "none" : undefined,
+		minify: minify,
+		legalComments: minify ? "none" : undefined,
 		format: "esm",
 		outfile: path.join(distPath, `${worker.name}.worker.js`),
 		platform: "browser",
