@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.3.0 (2023-11-03)
+
+### Chores
+
+*  commonjs build support ([06b6f340](https://github.com/jason-rietzke/simple-worker-vite/commit/06b6f3406f76ab9f384d3f8e8af878b29d154e87))
+* **deps-dev:**
+  *  bump postcss from 8.4.27 to 8.4.31 in /docs ([047c0cc6](https://github.com/jason-rietzke/simple-worker-vite/commit/047c0cc61506d865a657bda7746f5b26652e13c3))
+  *  bump postcss from 8.4.27 to 8.4.31 ([125e0fa7](https://github.com/jason-rietzke/simple-worker-vite/commit/125e0fa761797bad9b826b1075b1bf71bb8a4c90))
+
+### Bug Fixes
+
+*  vite-plugin minify option ([177729f5](https://github.com/jason-rietzke/simple-worker-vite/commit/177729f5fb0f66094f93c99ddaaff8f8fd6352bd))
+
 ## 0.2.0 (2023-08-12)
 
 ### Chores
