@@ -3,7 +3,6 @@
 	"version": "0.3.0",
 	"description": "easy way to use web workers with vite",
 	"scripts": {
-		"dev": "vite",
 		"build": "vite build && npm run publint",
 		"publint": "npx publint --strict",
 		"format": "prettier --ignore-path .gitignore --write \"src/**/*.{js,ts}\""
