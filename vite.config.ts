@@ -15,7 +15,6 @@ export default defineConfig({
 	build: {
 		lib: {
 			entry: {
-				main: resolve(__dirname, "src/main.ts"),
 				"vite-plugin": resolve(__dirname, "src/vite-plugin.ts"),
 			},
 			name: "simple-worker-vite",

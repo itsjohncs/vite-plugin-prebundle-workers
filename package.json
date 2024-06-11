@@ -11,16 +11,6 @@
 	"exports": {
 		".": {
 			"import": {
-				"types": "./dist/main.d.mts",
-				"default": "./dist/main.mjs"
-			},
-			"require": {
-				"types": "./dist/main.d.ts",
-				"default": "./dist/main.js"
-			}
-		},
-		"./plugin": {
-			"import": {
 				"types": "./dist/vite-plugin.d.mts",
 				"default": "./dist/vite-plugin.mjs"
 			},
@@ -33,9 +23,6 @@
 	"typesVersions": {
 		"*": {
 			".": [
-				"dist/main.d.ts"
-			],
-			"plugin": [
 				"dist/vite-plugin.d.ts"
 			]
 		}
