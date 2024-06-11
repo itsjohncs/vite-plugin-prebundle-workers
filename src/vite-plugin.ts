@@ -1,4 +1,4 @@
-import type { Plugin, ResolvedConfig } from "vite";
+import type { Plugin, ResolvedConfig, transformWithEsbuild } from "vite";
 import * as esbuild from "esbuild";
 import * as path from "path";
 import * as fs from "fs";
@@ -31,74 +31,36 @@ export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
 		minify: options.minify ?? true,
 	};
 
-	let resolvedConfig: ResolvedConfig;
-	let distPath: string;
-
 	return {
 		name: "simple-worker-vite",
-		configResolved(getResolvedConfig) {
-			resolvedConfig = getResolvedConfig;
-			distPath = path.join(
-				resolvedConfig.root,
-				resolvedConfig.build.outDir,
-				resolvedConfig.base,
-				config.publicPath,
-			);
-		},
-		configureServer(server) {
-			buildWorkers(distPath, false, config.workers);
-			return () => {
-				server.middlewares.use((req, res, next) => {
-					if (!req.url?.includes(config.publicPath)) return next();
-					const workerPath = path.join(
-						resolvedConfig.root,
-						resolvedConfig.build.outDir,
-						resolvedConfig.base,
-						req.url,
-					);
-					if (!fs.existsSync(workerPath)) return next();
-					res.setHeader("Content-Type", "application/javascript");
-					res.end(fs.readFileSync(workerPath));
-				});
-			};
-		},
-		handleHotUpdate(ctx) {
-			const workerSrcPaths = config.workers.map((worker) => worker.srcPath);
-			const workerSrcPath = workerSrcPaths.find((path) => ctx.file.includes(path));
-			if (!workerSrcPath) return;
-			const worker = config.workers.find((worker) => worker.srcPath === workerSrcPath);
-			if (!worker) return;
-			console.log(`[simple-worker-vite] Rebuilding worker "${worker.name}" (${worker.srcPath})`);
-			buildWorker(distPath, false, worker);
-			ctx.server.ws.send({
-				type: "full-reload",
-				path: "*",
+		async load(id: string) {
+			// if (!match(id)) {
+			// 	continue;
+			// }
+			if (!id.includes("DetectGridWidthWorker")) {
+				return undefined;
+			}
+
+			const result = await esbuild.build({
+				entryPoints: [id],
+				bundle: true,
+				minify: config.minify,
+				legalComments: config.minify ? "none" : undefined,
+				format: "iife",
+				platform: "browser",
+				write: false,
+				outfile: "out.js",
 			});
-		},
-		writeBundle() {
-			if (!fs.existsSync(distPath)) fs.mkdirSync(distPath, { recursive: true });
-			buildWorkers(distPath, config.minify, config.workers);
+
+			if (result.outputFiles?.length !== 1) {
+				console.log(result);
+				const numFiles = result.outputFiles?.length;
+				throw new Error(`Expected 1 output file, got ${numFiles}.`);
+			}
+
+			return result.outputFiles[0].text;
 		},
 	};
-}
-
-function buildWorkers(distPath: string, minify: boolean, workers: WorkerOptions[]) {
-	workers.forEach((worker) => {
-		buildWorker(distPath, minify, worker);
-	});
-}
-
-function buildWorker(distPath: string, minify: boolean, worker: WorkerOptions) {
-	if (!fs.existsSync(worker.srcPath)) throw new Error(`Worker file ${worker.srcPath} does not exist`);
-	esbuild.buildSync({
-		entryPoints: [worker.srcPath],
-		bundle: true,
-		minify: minify,
-		legalComments: minify ? "none" : undefined,
-		format: "esm",
-		outfile: path.join(distPath, `${worker.name}.worker.js`),
-		platform: "browser",
-	});
 }
 
 export function workerFromFile(path: string): WorkerOptions {
