@@ -27,14 +27,14 @@ npm install vite-plugin-prebundle-workers
 ```js
 // vite.config.js
 import { defineConfig } from "vite";
-import { simpleWorkerPlugin, workersFromDir } from "vite-plugin-prebundle-workers";
+import prebundleWorkers from "vite-plugin-prebundle-workers";
 
 export default defineConfig({
-	plugins: [
-		simpleWorkerPlugin({
+    plugins: [
+        prebundleWorkers({
             include: "src/myGreatWorker.js"
         })
-	],
+    ],
 });
 ```
 
