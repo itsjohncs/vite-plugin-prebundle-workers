@@ -1,13 +1,13 @@
 import { createFilter, Plugin, FilterPattern } from "vite";
 import esbuild, { BuildOptions } from "esbuild";
 
-export interface SimpleWorkerOptions {
+export interface PrebundleWorkerOptions {
 	include?: FilterPattern;
 	exclude?: FilterPattern;
 	configureEsBuild?: (id: string, options: BuildOptions) => BuildOptions;
 }
 
-export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
+export default function prebundleWorkers(options: PrebundleWorkerOptions): Plugin {
 	if (!options.include && !options.exclude) {
 		return { name: "vite-plugin-prebundle-workers" };
 	}
