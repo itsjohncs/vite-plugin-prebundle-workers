@@ -17,7 +17,7 @@ export default defineConfig({
 			entry: {
 				"vite-plugin": resolve(__dirname, "src/vite-plugin.ts"),
 			},
-			name: "simple-worker-vite",
+			name: "vite-plugin-prebundle-workers",
 			formats: ["es", "cjs"],
 		},
 		minify: false,

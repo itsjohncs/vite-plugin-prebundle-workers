@@ -1,7 +1,7 @@
 {
-	"name": "simple-worker-vite",
-	"version": "0.3.0",
-	"description": "easy way to use web workers with vite",
+	"name": "vite-plugin-prebundle-workers",
+	"version": "0.1.0",
+	"description": "Bundle classic Vite web workers during development.",
 	"scripts": {
 		"build": "vite build && npm run publint",
 		"publint": "npx publint --strict",
@@ -28,17 +28,18 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/jason-rietzke/simple-worker-vite.git"
+		"url": "git+https://github.com/itsjohncs/vite-plugin-prebundle-workers.git"
 	},
-	"author": "Jason Rietzke <jason.rietzke@livereader.de> (https://github.com/jason-rietzke)",
+	"author": "John Sullivan <johnsullivan.pem@gmail.com> (https://github.com/itsjohncs)",
 	"contributors": [
-		"Jason Rietzke <jason.rietzke@livereader.de> (https://github.com/jason-rietzke)"
+		"Jason Rietzke <jason.rietzke@livereader.de> (https://github.com/jason-rietzke)",
+		"John Sullivan <johnsullivan.pem@gmail.com> (https://github.com/itsjohncs)"
 	],
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/jason-rietzke/simple-worker-vite/issues"
+		"url": "https://github.com/itsjohncs/vite-plugin-prebundle-workers/issues"
 	},
-	"homepage": "https://jason-rietzke.github.io/simple-worker-vite/",
+	"homepage": "https://github.com/itsjohncs/vite-plugin-prebundle-workers",
 	"devDependencies": {
 		"@types/node": "^20.4.9",
 		"esbuild": "^0.19.0",

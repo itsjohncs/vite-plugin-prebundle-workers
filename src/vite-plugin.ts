@@ -9,14 +9,14 @@ export interface SimpleWorkerOptions {
 
 export function simpleWorkerPlugin(options: SimpleWorkerOptions): Plugin {
 	if (!options.include && !options.exclude) {
-		return { name: "simple-worker-vite" };
+		return { name: "vite-plugin-prebundle-workers" };
 	}
 
 	const filter = createFilter(options.include, options.exclude);
 	const configure = options.configureEsBuild ?? ((_, x) => x);
 
 	return {
-		name: "simple-worker-vite",
+		name: "vite-plugin-prebundle-workers",
 		async load(id: string) {
 			if (!filter(id)) {
 				return undefined;
